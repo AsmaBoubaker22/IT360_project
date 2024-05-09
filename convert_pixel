@@ -1,0 +1,31 @@
+from PIL import Image, ImageDraw
+
+def create_image_from_hex_codes(hex_codes, image_size):
+    # Create a new image
+    img = Image.new('RGB', image_size)
+    draw = ImageDraw.Draw(img)
+
+    # Calculate width and height of each rectangle
+    width = image_size[0] // len(hex_codes)
+    height = image_size[1]
+
+    # Draw rectangles with respective colors
+    for i, hex_code in enumerate(hex_codes):
+        draw.rectangle([i*width, 0, (i+1)*width, height], fill=hex_code)
+
+    return img
+
+# Example list of hex codes
+hex_codes = ['#FF0000', '#00FF00', '#0000FF']  # Red, Green, Blue
+
+# Image size (width, height)
+image_size = (300, 100)
+
+# Create the image
+image = create_image_from_hex_codes(hex_codes, image_size)
+
+# Save the image
+image.save('color_image.png')
+
+# Display the image
+image.show()
