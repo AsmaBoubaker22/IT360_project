@@ -1,0 +1,35 @@
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
+from Crypto.Random import get_random_bytes
+
+def encrypt_text(text, key):
+    # Convert text to bytes
+    plaintext = text.encode('utf-8')
+    
+    # Generate a random IV
+    iv = get_random_bytes(AES.block_size)
+    
+    # Create AES cipher object
+    cipher = AES.new(key, AES.MODE_CBC, iv)
+    
+    # Pad the plaintext to match block size
+    padded_plaintext = pad(plaintext, AES.block_size)
+    
+    # Encrypt the padded plaintext
+    ciphertext = cipher.encrypt(padded_plaintext)
+    
+    # Return IV and ciphertext
+    return iv, ciphertext
+
+# Example text to encrypt
+text = "This is a very long text that needs to be encrypted using AES."
+
+# Generate a random key (16 bytes for AES-128)
+key = get_random_bytes(16)
+
+# Encrypt the text
+iv, ciphertext = encrypt_text(text, key)
+
+# Print IV and ciphertext
+print("IV:", iv)
+print("Ciphertext:", ciphertext)
