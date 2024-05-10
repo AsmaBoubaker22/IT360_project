@@ -1,0 +1,17 @@
+#permutation 
+if len(hex_pixels)%2 == 0 :
+    for i in range(0,int(len(hex_pixels)/2) , 2 ):
+        perm1 = hex_pixels[i]
+        perm2 = hex_pixels[(len(hex_pixels)-1)-i]
+        hex_pixels[i] = perm2
+        hex_pixels[(len(hex_pixels)-1)-i] = perm1
+    
+else :
+    for i in range(0,int((len(hex_pixels)+1)/2) , 2 ):
+        perm1 = hex_pixels[i]
+        perm2 = hex_pixels[(len(hex_pixels)-1)-i]
+        hex_pixels[i] = perm2
+        hex_pixels[(len(hex_pixels)-1)-i] = perm1
+
+for i in range(10):
+     print(hex_pixels[i])
