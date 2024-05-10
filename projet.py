@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from PIL import Image
 
 # Open the image file
@@ -216,8 +217,12 @@ iv, ciphertext = encrypt_text(text, key)
 
 import argparse
 from Crypto.Cipher import AES
-from Crypto.Until.Padding import pad
+from Crypto.Util.Padding import pad, unpad 
 import numpy as np
+import random
+import sympy 
+
+
 def permutation():
         permutated_image=hex_pixels
         return permutated_image
@@ -242,18 +247,29 @@ def encrypt_image(image_file,transposition_key,shared_key=None,encrypt_with_aes=
             print("image encrypted by permutation and transposition only .")
         with open(image_file+'.enc','wb')as f:
             f.write(encrypted_data)
-        print(f"Inage encrypted and saved as {image_file}.enc")
+        print(f"Image encrypted and saved as {image_file}.enc")
+p=sympy.randprime(1,200000)
+q=random.random()
+def diffie_hellman(p,q):
+    private_key=int(input("Enter your private key :"))
+    public_key=pow(q,private_key,p)
+    return private_key,public_key
 
 def main():
-    parser=argparse.ArgumentParser(description='kabb command')
+    parser=argparse.ArgumentParser(prog='kabb',description='new kabb command to encrypt an image')
     parser=argparse.ArgumentParser(description='new command')
     parser.add_argument('-n','--image',metavar='IMAGE_FILE',help='name of the image file to encrypt',required=True)
-    parser.add_argument('-enc','--encrypt',action='store_true',help='encrypt the image')        
-args=parser.parse.args()
-if args.encrypt:
-     shared_key=("enter you shared secret key :") or None
-     encrypt_image(args.image,shared_key,encrypt_with_aes=bool(shared_key))
+    parser.add_argument('-enc','--encrypt',action='store_true',help='encrypt the image')  
+    parser.add_argument('-g','--generate-key',action='store_true',help='generate shared key using diffie-hellman')      
+    args=parser.parse_args()
+    shared_key=None
+    if args.generate_key:
+        shared_key=pow(q,diffie_hellman(p,q)[0],p)
+        print("shared key :",shared_key)
+    if args.encrypt:
+        shared_key=input("enter you shared secret key :") or None
+        encrypt_image(args.image,shared_key,encrypt_with_aes=bool(shared_key))
 if __name__=="__main__":
-     main()
+    main()
 
 
