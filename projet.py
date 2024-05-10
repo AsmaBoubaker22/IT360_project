@@ -1,7 +1,7 @@
 from PIL import Image
 
 # Open the image file
-image = Image.open(r'C:\test\image.jpeg')  # Replace 'example_image.jpg' with the path to your image file
+image = Image.open(r'/home/liveuser/Downloads/image.jpeg')  # Replace 'example_image.jpg' with the path to your image file
 
 
 #------------------------------------------------------------------------------------------
@@ -140,7 +140,7 @@ image_final = create(hex_codes, image_dimension)
 
 # Save the image
 from PIL.ExifTags import TAGS
-image_final.save('C:/test/output1.jpg', 'JPEG', exif='metadata')
+image_final.save('/home/liveuser/Downloads/asma2.jpeg', 'JPEG')
 
 #image_final.show()
 '''
@@ -172,7 +172,7 @@ def derive_aes_key(shared_secret):
 # shared_secret is the Diffie-Hellman shared secret obtained from the key exchange process
 shared_secret = b'1248978564653346'
 aes_key = derive_aes_key(shared_secret)
-print("Derived AES Key:", aes_key.hex())
+#print("Derived AES Key:", aes_key.hex())
 
 
 
@@ -212,5 +212,48 @@ iv, ciphertext = encrypt_text(text, key)
 
 # Print IV and ciphertext
 #print("IV:", iv)
-print("Ciphertext:", ciphertext)
+#print("Ciphertext:", ciphertext)
+
+import argparse
+from Crypto.Cipher import AES
+from Crypto.Until.Padding import pad
+import numpy as np
+def permutation():
+        permutated_image=hex_pixels
+        return permutated_image
+def transposition():
+        transposed_image=transposed_pixel_final
+        return transposed_image
+def encrypt_aes(image,shared_key):
+        cipher=AES.new(shared_key,AES.mode.ecb)
+        padded_image_data=pad(image,AES.block_size)
+        encrypted_image_data=cipher.encrypt(padded_image_data)
+        return encrypted_image_data
+def encrypt_image(image_file,transposition_key,shared_key=None,encrypt_with_aes=False):
+        with open(image_file,'rb') as f:
+             image_data =f.read()
+        permuted_image=permutation()
+        transposed_image=transposition()
+        if encrypt_with_aes :
+            encrypted_data=encrypt_aes(transposed_image,shared_key)
+            print("image encrypted using AES")
+        else:
+            encrypted_data=transposed_image
+            print("image encrypted by permutation and transposition only .")
+        with open(image_file+'.enc','wb')as f:
+            f.write(encrypted_data)
+        print(f"Inage encrypted and saved as {image_file}.enc")
+
+def main():
+    parser=argparse.ArgumentParser(description='kabb command')
+    parser=argparse.ArgumentParser(description='new command')
+    parser.add_argument('-n','--image',metavar='IMAGE_FILE',help='name of the image file to encrypt',required=True)
+    parser.add_argument('-enc','--encrypt',action='store_true',help='encrypt the image')        
+args=parser.parse.args()
+if args.encrypt:
+     shared_key=("enter you shared secret key :") or None
+     encrypt_image(args.image,shared_key,encrypt_with_aes=bool(shared_key))
+if __name__=="__main__":
+     main()
+
 
