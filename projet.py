@@ -144,7 +144,7 @@ image_final.save('C:/test/output1.jpg', 'JPEG', exif='metadata')
 
 #image_final.show()
 '''
-$kabb -n image.jpg -enc 
+$kabb -n image.jpg -enc  
 secret key:
 to generate --help , recommend -g '''
 
@@ -213,3 +213,4 @@ iv, ciphertext = encrypt_text(text, key)
 # Print IV and ciphertext
 #print("IV:", iv)
 print("Ciphertext:", ciphertext)
+
