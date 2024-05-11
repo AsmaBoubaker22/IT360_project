@@ -1,7 +1,7 @@
-#IMAGE CONVERSION TO HEX CODES
+IMAGE CONVERSION TO HEX CODES
 from PIL import Image
 
-image = Image.open(r'C:\test\image.png')
+image = Image.open(r'/home/liveuser/Documents/Python-3.12.3/Programs/image.png')
 
 # Convert the image to RGB mode (in case it's not already)
 image = image.convert('RGB')
@@ -161,7 +161,7 @@ class Encryptor:
         plaintext = cipher.decrypt(cipherText[AES.block_size:])
         return plaintext.rstrip(b"\0")
 
-def derive_aes_key(shared_secret):
+def derive_aes_key(shared_key):
     # Perform key derivation using HKDF
     hkdf = HKDF(
         algorithm=hashes.SHA256(),
@@ -170,14 +170,14 @@ def derive_aes_key(shared_secret):
         info=b'diffie-hellman-secret-to-aes-key',
         backend=default_backend()
     )
-    aes_key = hkdf.derive(shared_secret)
+    aes_key = hkdf.derive(shared_key)
     return aes_key
 
-shared_key = 'AAA564669454'
+shared_key = b'7896512564669454'
 aes_key=derive_aes_key(shared_key)
 encryptor=Encryptor(aes_key)
 cipherText=encryptor.encrypt(transposition_key_str.encode())
-
+cipherText_test=cipherText.decode()
 with open("enc_key.txt", "w") as file:
     # Write the variable to the file
-    file.write(cipherText)
+    file.write(cipherText_test)
