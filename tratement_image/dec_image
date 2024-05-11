@@ -1,8 +1,72 @@
-from PIL import Image
-#----------------------------------------------------------------------------------------------------------------
-# Open the ENCRYPTED image file
-image = Image.open('enc_image.jpeg')
+#---------------------------------------------------------------------------------------------
+#DECRYPT EMBEDDED KEY TXT FILE
+# Open the text file in read mode
+shared_key = b'564669454'
+with open("enc_key.txt", "r") as file:
+    # Read the contents of the file into a variable
+    enc_key = file.read()
 
+#AES
+from Crypto import Random
+from Crypto.Cipher import AES
+import os
+import os.path
+from os import listdir
+from os.path import isfile, join
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+
+
+class Encryptor:
+    def __init__(self, key):
+        self.key = key
+
+    def pad(self, s):
+        return s + b"\0" * (AES.block_size - len(s) % AES.block_size)
+
+    def encrypt(self, message):
+        message = self.pad(message)
+        iv = Random.new().read(AES.block_size)
+        cipher = AES.new(self.key, AES.MODE_CBC, iv)
+        return iv + cipher.encrypt(message)
+
+    def decrypt(self, cipherText):
+        iv = cipherText[:AES.block_size]
+        cipher = AES.new(self.key, AES.MODE_CBC, iv)
+        plaintext = cipher.decrypt(cipherText[AES.block_size:])
+        return plaintext.rstrip(b"\0")
+
+
+def derive_aes_key(shared_secret):
+    # Perform key derivation using HKDF
+    hkdf = HKDF(
+        algorithm=hashes.SHA256(),
+        length=32,  # AES-256 key size (32 bytes)
+        salt=None,
+        info=b'diffie-hellman-secret-to-aes-key',
+        backend=default_backend()
+    )
+    aes_key = hkdf.derive(shared_secret)
+    return aes_key
+
+aes_key = derive_aes_key(shared_key)
+encryptor = Encryptor(aes_key)
+decrypted_key = encryptor.decrypt(enc_key)
+
+
+trans_key_str = list(decrypted_key)
+trans_key_int = list(map(int, trans_key_str))
+
+
+"""for i in range(10):
+   print(trans_key_int[i])"""
+
+#------------------------------------------------------------------------------------------------------------
+# IMAGE CONVERSION TO PIXELS
+from PIL import Image
+
+image = Image.open('enc_image.png')
 
 # Convert the image to RGB mode (in case it's not already)
 image = image.convert('RGB')
@@ -12,8 +76,8 @@ width, height = image.size
 
 # Access pixel data and convert to hex
 hex_pixels = []
-for y in range(height):
-    for x in range(width):
+for x in range(width):
+    for y in range(height):
         # Get the RGB values of the pixel at position (x, y)
         r, g, b = image.getpixel((x, y))
         # Convert RGB values to hexadecimal format and concatenate
@@ -22,21 +86,10 @@ for y in range(height):
         hex_pixels.append(hex_code)
 
 # Print or store the list of hex codes
-for i in range(10):
-   print(hex_pixels[i])
-
-#---------------------------------------------------------------------------------------------
-#open ENCRYPTED TRANSPOSITION KEY txt file
-# Open the text file in read mode
-with open("enc_key.txt", "r") as file:
-    # Read the contents of the file into a variable
-    trans_key = file.read()
-
-trans_key_str = list(trans_key)
-trans_key_int = list(map(int, trans_key_str))
-
-for i in range(10):
-   print(trans_key_int[i])
+"""for i in range(10):
+   print(hex_pixels[i])"""
+#print("pixels")
+#print(hex_pixels)
 
 
 #----------------------------------------------------------------------------------------------------
@@ -85,15 +138,18 @@ def decrypt_transposition(enc_pixels, enc_key):
 # Test
 org_pixels = decrypt_transposition(hex_pixels, trans_key_int)
 
-for i in range(10):
-   print(org_pixels[i])
+"""for i in range(10):
+   print(org_pixels[i])"""
+
 
 #---------------------------------------------------------------------------------------------------------
 #Decrypt permutation
 if len(org_pixels) % 2 == 0:
     for i in range(0, int(len(org_pixels) / 2), 2):
         perm1 = org_pixels[i]
+        #print("perm1:",perm1)
         perm2 = org_pixels[(len(org_pixels) - 1) - i]
+        #print("perm2:",perm2)
         org_pixels[i] = perm2
         org_pixels[(len(org_pixels) - 1) - i] = perm1
 
@@ -105,9 +161,9 @@ else:
         org_pixels[(len(org_pixels) - 1) - i] = perm1
 
 #print('permuted')
-#for i in range(10):
-#   print(org_pixels[i])
-print(org_pixels)
+"""for i in range(10):
+   print(org_pixels[i])"""
+#print(org_pixels)
 #--------------------------------------------------------------------------------------------------
 # Create the image
 from PIL import Image
@@ -148,7 +204,7 @@ image_dimension = (width,height )
 image_final = create(hex_codes, image_dimension)
 
 # Save the image
-image_final.save('dec_image.jpeg','JPEG')
+image_final.save('dec_image.PNG','PNG')
 
 # Display the image
 image_final.show()
