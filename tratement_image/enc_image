@@ -1,4 +1,4 @@
-IMAGE CONVERSION TO HEX CODES
+#IMAGE CONVERSION TO HEX CODES
 from PIL import Image
 
 image = Image.open(r'/home/liveuser/Documents/Python-3.12.3/Programs/image.png')
