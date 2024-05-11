@@ -15,7 +15,7 @@ class Encryptor:
         iv=Random.new().read(AES.block_size)
         cipher=AES.new(self.key,AES.MODE_CBC,iv)
         return cipher.encrypt(message)
-    def decrypt(cipherText,self):
+    def decrypt(self,cipher_text):
         iv=cipherText[:AES.block_size]
         cipher=AES.new(self.key,AES.MODE_CBC,iv)
         plaintext=cipher.decrypt(cipherText[AES.block_size_size:])
