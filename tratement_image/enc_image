@@ -177,7 +177,8 @@ shared_key = b'7896512564669454'
 aes_key=derive_aes_key(shared_key)
 encryptor=Encryptor(aes_key)
 cipherText=encryptor.encrypt(transposition_key_str.encode())
-cipherText_test=cipherText.decode()
+
+#save encrypted transposition key
 with open("enc_key.txt", "w") as file:
     # Write the variable to the file
     file.write(cipherText_test)
