@@ -8,9 +8,6 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 
-
-
-
 class Encryptor:
     def __init__(self,key):
         self.key=key
@@ -39,11 +36,22 @@ def derive_aes_key(shared_secret):
     aes_key = hkdf.derive(shared_secret)
     return aes_key
 
+    
 shared_secret=os.urandom(32)
-aes_key=derive_aes_key(shared_secret)
-encryptor=Encryptor(aes_key)
+#aes_key=derive_aes_key(shared_secret)
+#encryptor=Encryptor(aes_key)
 transposition_key=b"852369741255896325874"
-cipherText=encryptor.encrypt(transposition_key)
-print("encrypted:",cipherText)
-decrypted_transposition_key=encryptor.decrypt(cipherText)
-print("decrypted : ",decrypted_transposition_key)
+#cipherText=encryptor.encrypt(transposition_key)
+#shared_secret_key=encryptor.encrypt()
+#print("encrypted:",cipherText)
+#decrypted_transposition_key=encryptor.decrypt(cipherText)
+#print("decrypted : ",decrypted_transposition_key)
+
+def file_creation(shared_secret,transposition_key):
+    aes_key=derive_aes_key(shared_secret)
+    encryptor=Encryptor(aes_key)
+    transposition_key_encrypted=encryptor.encrypt(transposition_key)
+    with open("enc_key.txt", "w") as file:
+     #Write the variable to the file
+     transposition_key_str=str(transposition_key)
+     file.write(transposition_key_encrypted)
