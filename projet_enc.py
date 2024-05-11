@@ -82,7 +82,7 @@ print('transposed_pixel_final')
 for i in range(10):
     print(transposed_pixels[i])
 
-'''
+
 #--------------------------------------------------------------------------------------------
 '''#convert the pixels back to image 
 
@@ -131,10 +131,10 @@ from PIL.ExifTags import TAGS
 image_final.save('/home/liveuser/Downloads/asma2.jpeg', 'JPEG')
 
 #image_final.show()
-
+'''
 $kabb -n image.jpg -enc  
 secret key:
-to generate --help , recommend -g '''
+to generate --help , recommend -g ''''
 
 
 #---------------------------------------------------------------------------------------------
@@ -158,15 +158,15 @@ def derive_aes_key(shared_secret):
 
 # Example usage:
 # shared_secret is the Diffie-Hellman shared secret obtained from the key exchange process
-shared_secret = b'1248978564653346'
-aes_key = derive_aes_key(shared_secret)
+#shared_secret = b'1248978564653346'
+#aes_key = derive_aes_key(shared_secret)
 #print("Derived AES Key:", aes_key.hex())
 
 
 
 #----------------------------------------------------------------------------------------------------------
-#aes encryption
-'''from Crypto.Cipher import AES
+#aes encryption for transposition key 
+from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 from Crypto.Random import get_random_bytes
 
@@ -187,21 +187,22 @@ def encrypt_text(text, key):
     ciphertext = cipher.encrypt(padded_plaintext)
     
     # Return IV and ciphertext
-    return iv, ciphertext
+    encrypt_text_return=[iv,ciphertext]
+    return encrypt_text_return
 
 # Example text to encrypt
-text = transposition_key
+#text = transposition_key
 
 # Generate a random key (16 bytes for AES-128)
-key = aes_key
+#key = aes_key
 
 # Encrypt the text
-iv, ciphertext = encrypt_text(text, key)
+#iv, ciphertext = encrypt_text(text, key)
 
 # Print IV and ciphertext
 #print("IV:", iv)
 #print("Ciphertext:", ciphertext)
-'''
+
 import argparse
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad 
@@ -230,11 +231,11 @@ def permutation(hex_pixels):
 
 #transposition function
 import random
-def transposition():
+def transposition(permutated_image):
     def generate_random_keys(image_size):
         random_keys = [random.randint(1, 6) for _ in range(image_size)]
         return random_keys
-    transposition_key=generate_random_keys(len(hex_pixels))
+    transposition_key=generate_random_keys(len(permutated_image))
     for i in range(10):
          print(transposition_key[i])
 
@@ -251,29 +252,27 @@ def transposition():
                 pointer += key
         cipher = ''.join(cipher)
         transposed_pixels.append(cipher)
-        return transposed_pixels
-    transposed_pixels = transpose_pixel(hex_pixels,transposition_key)
-    print('transposed_pixel_final')
-    transposed_image=transposed_pixels
-    return transposed_image
+        transposed_pixels_return=[transposition_key,transposed_pixels]
+        return transposed_pixels_return
+    transposed_pixels = transpose_pixel(permutated_image,transposition_key)
+    #print('transposed_pixel_final')
+    return transposed_pixels
 
 #encrypt_aes_image function
-def encrypt_aes(image,shared_key):
+'''def encrypt_aes(image,shared_key):
         cipher=AES.new(shared_key,AES.MODE_ECB)
         padded_image_data=pad(image,AES.block_size)
         encrypted_image_data=cipher.encrypt(padded_image_data)
-        return encrypted_image_data
+        return encrypted_image_data'''
+
 def encrypt_image(image_file,transposition_key,shared_key=None,encrypt_with_aes=False):
         with open(image_file,'rb') as f:
              image_data =f.read()
-        permuted_image=permutation()
-        transposed_image=transposition()
-        if encrypt_with_aes :
-            encrypted_data=encrypt_aes(transposed_image,shared_key)
-            print("image encrypted using AES")
-        else:
-            encrypted_data=transposed_image
-            print("image encrypted by permutation and transposition only .")
+        permuted_image=permutation(image_file)
+        transposed_image=transposition(permuted_image,transposition_key)
+        derived_aes_key=derive_aes_key(shared_key)
+        encrypted_aes_key=encrypt_text(transposed_image[0], derived_aes_key[1])
+        
         with open(image_file+'.enc','wb')as f:
             f.write(encrypted_data)
         print(f"Image encrypted and saved as {image_file}.enc")
@@ -302,7 +301,12 @@ def main():
         print("shared key :",shared_key)
     if args.encrypt:
         shared_key=input("enter you shared secret key :") 
+        permuted_image=permutation(image)
+        transposed_image=transposition(permuted_image)
+        derived_aes_key=derive_aes_key(shared_key)
+        encrypted_aes_key=encrypt_text(transposed_image[0], derived_aes_key[1])
         encrypt_image(args.image,shared_key,encrypt_with_aes=bool(shared_key))
+        if shared_key
     
 if __name__=="__main__":
     main()
