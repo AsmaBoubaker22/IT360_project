@@ -87,7 +87,6 @@ def encryption(image_to_encrypt,shared_key):
     # Print the dimensions
     #print("Width:", width)
     #print("Height:", height)
-    from PIL import Image, ImageDraw
     def create(hex_codes, image_size):
        # Create a new image with the specified size
        img = Image.new('RGB', image_size)
