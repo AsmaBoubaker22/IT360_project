@@ -181,4 +181,4 @@ cipherText=encryptor.encrypt(transposition_key_str.encode())
 #save encrypted transposition key
 with open("enc_key.txt", "wb") as file:
     # Write the variable to the file
-    file.write(cipherText_test)
+    file.write(cipherText)
