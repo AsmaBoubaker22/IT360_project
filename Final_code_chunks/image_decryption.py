@@ -194,4 +194,4 @@ def image_decryption(image_path, file_path):
  image_final.save('dec_image.PNG','PNG')
 
  # Display the image
- image_final.sho
+ image_final.show()
