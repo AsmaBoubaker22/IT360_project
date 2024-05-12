@@ -23,7 +23,7 @@ def main():
     if args.encrypt:
         shared_key=int(input("enter you shared secret key :"))
         if shared_key:
-           import enc_test
+           import image_encryption
            enc_test.encryption(args.image,shared_key)
         else:
             print("if you do not have a key type -g to generate it ")
