@@ -1,7 +1,7 @@
 #---------------------------------------------------------------------------------------------
 #DECRYPT EMBEDDED KEY TXT FILE
 # Open the text file in read mode
-shared_key = b'564669454'
+shared_key = b'7896512564669454'
 with open("enc_key.txt", "rb") as file:
     # Read the contents of the file into a variable
     enc_key = file.read()
@@ -55,7 +55,7 @@ encryptor = Encryptor(aes_key)
 decrypted_key = encryptor.decrypt(enc_key)
 decrypted_key=decrypted_key.decode('utf-8')
 #decrypted_key=str(decrypted_key,'utf')
-print(decrypted_key)
+#print(decrypted_key)
 #print(type(enc_key))
 trans_key_str = list(decrypted_key)
 trans_key_int = list(map(int, trans_key_str))
@@ -63,7 +63,7 @@ trans_key_int = list(map(int, trans_key_str))
 
 """for i in range(10):
    print(trans_key_int[i])"""
-'''
+
 #------------------------------------------------------------------------------------------------------------
 # IMAGE CONVERSION TO PIXELS
 from PIL import Image
@@ -209,4 +209,4 @@ image_final = create(hex_codes, image_dimension)
 image_final.save('dec_image.PNG','PNG')
 
 # Display the image
-image_final.show()'''
+image_final.show()
