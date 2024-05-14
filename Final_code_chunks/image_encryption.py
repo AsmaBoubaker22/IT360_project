@@ -1,4 +1,3 @@
-#IMAGE CONVERSION TO HEX CODES
 from PIL import Image
 from Crypto import Random
 from Crypto.Cipher import AES
@@ -64,29 +63,30 @@ def encryption(image_to_encrypt,shared_key):
 
 # print(transposition_key_pixels)
     def transpose_pixel(pixel_code, transposition_key):
-       transposed_pixels = []
-       for pixel, key in zip(pixel_code, transposition_key):
-           cipher = [''] * key
-           for column in range(key):
+        transposed_pixels = []
+        for pixel, key in zip(pixel_code, transposition_key):
+            cipher = [''] * key
+            for column in range(key):
               pointer = column
               while pointer < len(pixel):
                  cipher[column] += pixel[pointer]
                  pointer += key
-                 cipher = ''.join(cipher)
-           transposed_pixels.append(cipher)
-    return transposed_pixels
+            cipher = ''.join(cipher)
+            transposed_pixels.append(cipher)
+        return transposed_pixels
 
 
     transposed_pixels = transpose_pixel(hex_pixels, transposition_key)
 
 # -------------------------------------------------------------------------------------------------------------------
-# PIXELS CONVERSION TO IMAGE
-# Get the dimensions (width and height) of the image
+    # PIXELS CONVERSION TO IMAGE
+    # Get the dimensions (width and height) of the image
     width, height = image.size
 
     # Print the dimensions
     #print("Width:", width)
     #print("Height:", height)
+    
     def create(hex_codes, image_size):
        # Create a new image with the specified size
        img = Image.new('RGB', image_size)
@@ -150,10 +150,9 @@ def encryption(image_to_encrypt,shared_key):
         length=32,  # AES-256 key size (32 bytes)
         salt=None,
         info=b'diffie-hellman-secret-to-aes-key',
-        backend=default_backend()
-    )
-    aes_key = hkdf.derive(shared_key)
-    return aes_key
+        backend=default_backend())
+      aes_key = hkdf.derive(shared_key)
+      return aes_key
 
     
     aes_key=derive_aes_key(shared_key)
