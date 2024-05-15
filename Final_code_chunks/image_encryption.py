@@ -155,7 +155,7 @@ def encryption(image_to_encrypt,shared_key):
       return aes_key
 
     
-    aes_key=derive_aes_key(shared_key)
+    aes_key=derive_aes_key(shared_key.encode())
     encryptor=Encryptor(aes_key)
     cipherText=encryptor.encrypt(transposition_key_str.encode('utf-8'))
     print(cipherText)
