@@ -1,4 +1,18 @@
-def image_decryption(image_path, file_path):
+#!/usr/bin/python
+from Crypto import Random
+from Crypto.Cipher import AES
+import os
+import os.path
+from os import listdir
+from os.path import isfile, join
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+
+
+
+
+def image_decryption(image_path,file_path):
  #---------------------------------------------------------------------------------------------
  #DECRYPT EMBEDDED KEY TXT FILE
  #input shared key
@@ -11,15 +25,7 @@ def image_decryption(image_path, file_path):
      enc_key = file.read()
 
  #AES decryption
- from Crypto import Random
- from Crypto.Cipher import AES
- import os
- import os.path
- from os import listdir
- from os.path import isfile, join
- from cryptography.hazmat.primitives import hashes
- from cryptography.hazmat.backends import default_backend
- from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+
 
 
  class Encryptor:
