@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from PIL import Image
 from Crypto import Random
 from Crypto.Cipher import AES
@@ -158,7 +159,7 @@ def encryption(image_to_encrypt,shared_key):
     aes_key=derive_aes_key(shared_key.encode())
     encryptor=Encryptor(aes_key)
     cipherText=encryptor.encrypt(transposition_key_str.encode('utf-8'))
-    print(cipherText)
     with open("enc_key.txt", "wb") as file:
        #Write the variable to the file
        file.write(cipherText)
+
