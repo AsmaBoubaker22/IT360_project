@@ -1,3 +1,4 @@
+#!/usr/bin/python
 def key_generation():
  # Diffie-Hellman Code
  import numpy as np
@@ -29,3 +30,4 @@ def key_generation():
 
  #result
  print('this is your shared secret key: ', shared_key)
+key_generation()
