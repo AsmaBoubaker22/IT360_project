@@ -12,11 +12,14 @@ The project code will run in the LINUX CMD.
  
  5 - Diffie_Hellman.py : the key exchange algorithm code. this code will generate a prime and a base value as well as a shared secret key based on the user private key.
 
- *To run thee code on LINUX CMD, all files should be in the same directory, and some other steps should be done (explained here : https://linuxhandbook.com/run-python/ )
+ *To run the code on LINUX CMD, all files should be in the same directory, and some other steps should be done (explained here : https://linuxhandbook.com/run-python/ )
 
  *Arguments that can be used:
    -enc : to encrypt
+   
    -dec : to decrypt
+   
    -n : image path
+   
    -g : generate a shared key using Diffie_Hellman
    
