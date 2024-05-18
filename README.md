@@ -1,6 +1,7 @@
 # IT360_project
 
 The project code will run in the LINUX CMD.
+
  1 - main.py : is the main project code that links all other files and will be used in the CMD.
  
  2 - image.png : the image to be encrypted and used (note: the image must be png, since jpg type is not well suited for the project).
