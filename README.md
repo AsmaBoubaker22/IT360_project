@@ -15,6 +15,7 @@ The project code will run in the LINUX CMD.
  *To run the code on LINUX CMD, all files should be in the same directory, and some other steps should be done (explained here : https://linuxhandbook.com/run-python/ )
 
  *Arguments that can be used:
+ 
    -enc : to encrypt
    
    -dec : to decrypt
