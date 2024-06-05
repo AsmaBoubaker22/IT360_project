@@ -23,13 +23,20 @@ def main():
     args=parser.parse_args()
     
     if args.encrypt:
+        import image_encryption
         print("*Please make sure your shared key is an integer ")
         shared_key=input("enter you shared secret key :")
-        if shared_key :
-           import enc_test
-           enc_test.encryption(args.image,shared_key)
+        def verify(sahred_key):
+            try:
+                return int(shared_key)
+            except (ValueError , TypeError) : 
+                return "default"
+        s=verify(shared_key)       
+        if  (type(s)==int ):   
+            image_encryption.encryption(args.image,shared_key)
         else: 
             print("if you do not have a key type -g to generate it ")
+            print("*the key should be integer*")
             
     
     if args.generate_key:
